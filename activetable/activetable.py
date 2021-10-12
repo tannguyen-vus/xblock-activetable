@@ -3,7 +3,7 @@
 from __future__ import absolute_import, division, unicode_literals
 
 import textwrap
-
+import pkg_resources
 import six
 from six.moves import zip  # pylint: disable=import-error,redefined-builtin
 
@@ -43,6 +43,22 @@ class ActiveTableXBlock(StudioEditableXBlockMixin, XBlock):
             [42, Numeric(answer=42, tolerance=0.0)],
         ]
         """)
+    )
+    text_field_1 = String(
+        display_name='Text field 1',
+        help='Instruction before table',
+        scope=Scope.content,
+        multiline_editor=True,
+        resettable_editor=False,
+        default='text field 1'
+    )
+    text_field_2 = String(
+        display_name='Text field 1',
+        help='Instruction after table',
+        scope=Scope.content,
+        multiline_editor=True,
+        resettable_editor=False,
+        default='text field 2'
     )
     help_text = String(
         display_name='Help text',
@@ -100,6 +116,8 @@ class ActiveTableXBlock(StudioEditableXBlockMixin, XBlock):
         'default_tolerance',
         'maximum_score',
         'max_attempts',
+        'text_field_1',
+        'text_field_2'
     ]
 
     # Dictionary mapping cell ids to the student answers.
@@ -177,6 +195,8 @@ class ActiveTableXBlock(StudioEditableXBlockMixin, XBlock):
             maximum_score=self.maximum_score,
             attempts=self.attempts,
             max_attempts=self.max_attempts,
+            text_field_1 = self.text_field_1,
+            text_field_2 = self.text_field_2
         )
 
     def student_view(self, context=None):
@@ -192,6 +212,8 @@ class ActiveTableXBlock(StudioEditableXBlockMixin, XBlock):
             thead=self.thead,
             tbody=self.tbody,
             max_attempts=self.max_attempts,
+            text_field_1 = self.text_field_1,
+            text_field_2 = self.text_field_2
         )
         html = loader.render_django_template('templates/html/activetable.html', context)
 
@@ -282,20 +304,20 @@ class ActiveTableXBlock(StudioEditableXBlockMixin, XBlock):
                         'of rows in the table.'
                     )
 
+    # TO-DO: change this to create the scenarios you'd like to see in the
+    # workbench while developing your XBlock.
     @staticmethod
     def workbench_scenarios():
         """A canned scenario for display in the workbench."""
         return [
             ("ActiveTableXBlock",
+             """<activetable/>
+             """),
+            ("Multiple ActiveTableXBlock",
              """<vertical_demo>
-                  <activetable url_name="basic">
-                    [
-                      ['Event', 'Year'],
-                      ['French Revolution', Numeric(answer=1789)],
-                      ['Krakatoa volcano explosion', Numeric(answer=1883)],
-                      ["Proof of Fermat's last theorem", Numeric(answer=1994)],
-                    ]
-                  </activetable>
+                <activetable/>
+                <activetable/> 
+                <activetable/>
                 </vertical_demo>
              """),
         ]
