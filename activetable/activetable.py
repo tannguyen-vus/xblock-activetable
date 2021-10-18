@@ -312,12 +312,5 @@ class ActiveTableXBlock(StudioEditableXBlockMixin, XBlock):
         return [
             ("ActiveTableXBlock",
              """<activetable/>
-             """),
-            ("Multiple ActiveTableXBlock",
-             """<vertical_demo>
-                <activetable/>
-                <activetable/> 
-                <activetable/>
-                </vertical_demo>
-             """),
+             """)
         ]
